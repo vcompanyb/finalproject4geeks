@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Context } from "../store/appContext";
+import { useHistory } from "react-router-dom";
 
 const LogIn = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+	const { actions } = useContext(Context);
+	const history = useHistory();
 
 	function login(event) {
 		event.preventDefault();
@@ -28,7 +32,14 @@ const LogIn = () => {
 				responseOk = response.ok;
 				return response.json();
 			})
-			.then(responseJson => {})
+			.then(responseJson => {
+				if (responseOk) {
+					actions.saveAccessToken(responseJson.access_token);
+					history.push("/profile");
+				} else {
+					setError(responseJson.message);
+				}
+			})
 			.catch(error => {
 				setError(error.message);
 			});
