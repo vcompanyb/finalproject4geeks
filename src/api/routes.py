@@ -16,3 +16,14 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+@api.route('/signup', methods=['POST'])
+def signup():
+    body = request.get_json()
+
+    try:
+        User.create_user(body["email"], body["password"])
+    except:
+        raise APIException("Hubo un problema al intentar registrar el usuario", 401)
+
+    return jsonify({}), 200
