@@ -1,26 +1,20 @@
 import React, { useState } from "react";
 
-const SignUp = () => {
+const LogIn = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [confirmPassword, setConfirmPassword] = useState("");
 	const [error, setError] = useState("");
-	const [message, setMessage] = useState("");
 
-	function signup(event) {
+	function login(event) {
 		event.preventDefault();
 		setError("");
-		setMessage("");
 		if (email == "") {
 			setError("Email obligatorio");
 			return;
 		}
-		if (password != confirmPassword) {
-			setError("Las contraseñas no coinciden");
-			return;
-		}
+
 		let responseOk = false;
-		fetch("https://3001-plum-hyena-jrwsxvmx.ws-eu03.gitpod.io/api/signup", {
+		fetch("https://3001-plum-hyena-jrwsxvmx.ws-eu03.gitpod.io/api/login", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -32,16 +26,9 @@ const SignUp = () => {
 		})
 			.then(response => {
 				responseOk = response.ok;
-				if (response.ok) {
-					setMessage("Usuario registrado correctamente");
-				}
 				return response.json();
 			})
-			.then(responseJson => {
-				if (!responseOk) {
-					setError(responseJson.message);
-				}
-			})
+			.then(responseJson => {})
 			.catch(error => {
 				setError(error.message);
 			});
@@ -51,9 +38,7 @@ const SignUp = () => {
 	return (
 		<div className="jumbotron">
 			{error ? <h1>{error}</h1> : ""}
-			{message ? <h1>{message}</h1> : ""}
-			<form onSubmit={signup}>
-				<span>* is required</span>
+			<form onSubmit={login}>
 				<input
 					type="email"
 					placeholder="email"
@@ -62,7 +47,7 @@ const SignUp = () => {
 						setEmail(event.target.value);
 					}}
 				/>
-				*
+
 				<input
 					type="password"
 					placeholder="password"
@@ -71,18 +56,11 @@ const SignUp = () => {
 						setPassword(event.target.value);
 					}}
 				/>
-				<input
-					type="password"
-					required
-					placeholder="confirm password"
-					onChange={event => {
-						setConfirmPassword(event.target.value);
-					}}
-				/>
-				<input type="submit" value="Crear" />
+
+				<input type="submit" value="Acceder" />
 			</form>
 		</div>
 	);
 };
 
-export default SignUp;
+export default LogIn;

@@ -27,3 +27,8 @@ def signup():
         raise APIException("Hubo un problema al intentar registrar el usuario", 401)
 
     return jsonify({}), 200
+
+@api.route("/profile", methods=['GET'])
+def profile():
+    user = User.get(id)
+    return jsonify(user.serialize())

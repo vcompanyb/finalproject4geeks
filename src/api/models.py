@@ -7,13 +7,20 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+    phone = db.Column(db.Boolean(), unique=False, nullable=True)
+
+    def __init__(self, email, password, is_active=True):
+        if email == '' or password == '':
+            raise Exception("Email and user required")
+            
+        self.email = email
+        self.password = password
+        self.is_active = is_active
+
 
     @classmethod
     def create_user(cls, email, password):
-        user = cls()
-        user.email = email
-        user.password = password
-        user.is_active = True
+        user = cls(email, password)
         
         db.session.add(user)
         db.session.commit()
